@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_get_x/controller/auth_controller.dart';
-import 'package:flutter_get_x/dataSource/data.dart';
+import 'package:flutter_get_x/presentation/pages/forget_password.dart';
 import 'package:get/get.dart';
 
-class Forget_password extends StatelessWidget {
-   Forget_password({super.key});
+class cPassword extends StatefulWidget {
+   final  String userId;
+  const cPassword({super.key, required this.userId});
 
-  apiService service = apiService();
-  AuthController controller = Get.find();
-  final TextEditingController emailController = TextEditingController();
+  @override
+  State<cPassword> createState() => _SigninState();
+}
+
+class _SigninState extends State<cPassword> {
+  bool visibility = false;
+  bool checkValue = false;
+  
+  final AuthController controller = Get.put(AuthController());
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _cPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +34,7 @@ class Forget_password extends StatelessWidget {
               horizontal: 90,
             ),
             child: Text(
-              'Enter your Email',
+              'New Password',
               style: TextStyle(
                   fontFamily: 'Pooppins',
                   fontSize: 20,
@@ -36,7 +45,7 @@ class Forget_password extends StatelessWidget {
             height: 20,
           ),
           const Text(
-            'Email:',
+            'password:',
             style: TextStyle(
                 fontFamily: 'Pooppins',
                 fontSize: 15,
@@ -53,7 +62,7 @@ class Forget_password extends StatelessWidget {
                   color: Colors.green,
                 )),
             child: TextField(
-              controller: emailController,
+              controller: _passwordController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(10),
                 border: OutlineInputBorder(
@@ -62,9 +71,50 @@ class Forget_password extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
+          const Text(
+            'Confirm Password:',
+            style: TextStyle(
+                fontFamily: 'Pooppins',
+                fontSize: 15,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            width: 320,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.green,
+                )),
+            child: TextField(
+              controller: _cPasswordController,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          visibility = !visibility;
+                        });
+                      },
+                      icon: Icon(visibility
+                          ? Icons.visibility
+                          : Icons
+                              .visibility_off)) // Optional: adjust content padding
+                  ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          
           Padding(
               padding: const EdgeInsets.only(
                 left: 30,
@@ -73,21 +123,20 @@ class Forget_password extends StatelessWidget {
                   width: 260,
                   child: ElevatedButton(
                       onPressed: () {
-                        controller.fPassword(emailController.text);
+                            controller.resetPassword(widget.userId, _passwordController.text, _cPasswordController.text);
                         
                       },
                       style: const ButtonStyle(
                           backgroundColor:
                               WidgetStatePropertyAll(Colors.green)),
                       child: const Text(
-                        'Next',
+                        'Change',
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: Colors.black),
                       )))),
-         
         ],
       ),
     )));

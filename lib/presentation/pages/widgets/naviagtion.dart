@@ -40,7 +40,7 @@ class _NavigationBarBottomState extends State<NavigationBarBottom> {
 
                     break;
                   case 2:
-                    Get.toNamed('/Cart');
+                    Get.toNamed('/cart');
 
                     break;
                   case 3:

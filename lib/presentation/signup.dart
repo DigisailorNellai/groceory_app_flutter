@@ -7,14 +7,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({super.key});
+import '../controller/auth_controller.dart';
 
-  @override
-  State<Signup> createState() => _SignupState();
-}
+class Signup extends StatelessWidget {
+ Signup({super.key});
 
-class _SignupState extends State<Signup> {
+    final AuthController _authController = Get.put(AuthController());
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _mobileNumberController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +60,7 @@ class _SignupState extends State<Signup> {
                   color: Colors.green,
                 )),
             child: TextField(
+              controller: _usernameController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(10),
                 border: OutlineInputBorder(
@@ -85,6 +90,7 @@ class _SignupState extends State<Signup> {
                   color: Colors.green,
                 )),
             child: TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(10),
                 border: OutlineInputBorder(
@@ -114,6 +120,37 @@ class _SignupState extends State<Signup> {
                   color: Colors.green,
                 )),
             child: TextField(
+              controller: _mobileNumberController,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            'Password:',
+            style: TextStyle(
+                fontFamily: 'Pooppins',
+                fontSize: 15,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            width: 320,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.green,
+                )),
+            child: TextField(
+              controller: _passwordController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(10),
                 border: OutlineInputBorder(
@@ -125,16 +162,21 @@ class _SignupState extends State<Signup> {
           const SizedBox(
             height: 40,
           ),
-          Padding(
+           Padding(
               padding: const EdgeInsets.only(
                 left: 30,
               ),
               child: Container(
                   width: 260,
                   child: ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed('/Otp');
-                      },
+                      onPressed:  () {
+                    _authController.signup(
+                      _usernameController.text,
+                      _emailController.text,
+                    _mobileNumberController.text,
+                    _passwordController.text
+                    );
+                  },
                       style: const ButtonStyle(
                           backgroundColor:
                               WidgetStatePropertyAll(Colors.green)),

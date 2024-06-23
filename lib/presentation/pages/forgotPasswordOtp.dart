@@ -4,18 +4,18 @@ import 'package:flutter_get_x/controller/auth_controller.dart';
 import 'package:get/get.dart';
 
 
-class Otp extends StatefulWidget {
+class fPassOtp extends StatefulWidget {
   final String userId;
-   const Otp({super.key, required this.userId});
+   const fPassOtp({super.key, required this.userId});
 
   @override
-  State<Otp> createState() => _OtpState();
+  State<fPassOtp> createState() => _OtpState();
 }
 
-class _OtpState extends State<Otp> {
+class _OtpState extends State<fPassOtp> {
   TextEditingController otpController = TextEditingController();
   final AuthController controller = Get.find();
-  
+
   late List<FocusNode> _focusNodes;
   late List<TextEditingController> _controllers;
   final _numberOfFields = 4;
@@ -142,7 +142,7 @@ class _OtpState extends State<Otp> {
                               child: TextButton(
                                 onPressed: () {
                                   final otp = getOtp();
-                                  controller.verifyOtp(widget.userId, otp);
+                                  controller.verifyOtps(widget.userId, otp);
                                 },
                                 style: ButtonStyle(
                                     backgroundColor:

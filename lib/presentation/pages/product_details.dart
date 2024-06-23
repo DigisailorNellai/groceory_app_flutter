@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_get_x/controller/cartController.dart';
 import 'package:get/get.dart';
 
-class ProductDetails extends StatefulWidget {
-  const ProductDetails({Key? key}) : super(key: key);
+import '../../models/category.dart';
+import '../../services/storageServices.dart';
 
-  @override
-  _ProductDetailsState createState() => _ProductDetailsState();
-}
-
-class _ProductDetailsState extends State<ProductDetails> {
-  int quantity = 1;
-
-  void incrementQuantity() {
-    setState(() {
-      quantity++;
-    });
-  }
-
-  void decrementQuantity() {
-    if (quantity > 1) {
-      setState(() {
-        quantity--;
-      });
-    }
-  }
+class ProductDetails extends StatelessWidget {
+  final Item items;
+  const ProductDetails({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
+    
+    CartController controller = Get.put(CartController());
     return Scaffold(
       body: Stack(
         children: [
@@ -64,7 +50,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Fresh Carrot',
+                        items.title,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 24,
@@ -79,7 +65,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             size: 25,
                           ),
                           Text(
-                            '90/1Kg',
+                            'Price: ${items.price.toStringAsFixed(2)}',
                             style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 22,
@@ -94,7 +80,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Description',
+                            items.description,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
@@ -102,167 +88,192 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                           ),
                           SizedBox(
-                            height: 7,
+                            height: 20,
                           ),
-                          Text(
-                            'carrots provide highest content of vitamin A',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 7,
-                          ),
-                          Text(
-                            'it is crunchy,tatsty and high nutritious',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 7,
-                          ),
-                          Text(
-                            'They are Good Source of Fiber,Potassium',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 17,
-                          ),
-                          Text(
-                            'Nutrition',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 17,
-                          ),
+
+                          // Text(
+                          //   'carrots provide highest content of vitamin A',
+                          //   style: TextStyle(
+                          //     fontFamily: 'Poppins',
+                          //     fontSize: 13,
+                          //     fontWeight: FontWeight.w300,
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 7,
+                          // ),
+                          // Text(
+                          //   'it is crunchy,tatsty and high nutritious',
+                          //   style: TextStyle(
+                          //     fontFamily: 'Poppins',
+                          //     fontSize: 13,
+                          //     fontWeight: FontWeight.w300,
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 7,
+                          // ),
+                          // Text(
+                          //   'They are Good Source of Fiber,Potassium',
+                          //   style: TextStyle(
+                          //     fontFamily: 'Poppins',
+                          //     fontSize: 13,
+                          //     fontWeight: FontWeight.w300,
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 17,
+                          // ),
+                          // Text(
+                          //   'Nutrition',
+                          //   style: TextStyle(
+                          //     fontFamily: 'Poppins',
+                          //     fontWeight: FontWeight.w600,
+                          //     fontSize: 16,
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 17,
+                          // ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //   children: [
+                          //     Card(
+                          //       child: Container(
+                          //           width: 62,
+                          //           height: 40,
+                          //           child: Center(
+                          //             child: Text(
+                          //               '88%\nWater',
+                          //               style: TextStyle(
+                          //                   fontFamily: 'Poppins',
+                          //                   fontSize: 12,
+                          //                   fontWeight: FontWeight.w300),
+                          //             ),
+                          //           )),
+                          //     ),
+                          //     Card(
+                          //       child: Container(
+                          //           width: 62,
+                          //           height: 40,
+                          //           child: Center(
+                          //             child: Text(
+                          //               '0.9%\nProtien',
+                          //               style: TextStyle(
+                          //                   fontFamily: 'Poppins',
+                          //                   fontSize: 12,
+                          //                   fontWeight: FontWeight.w300),
+                          //             ),
+                          //           )),
+                          //     ),
+                          //     Card(
+                          //       child: Container(
+                          //           width: 62,
+                          //           height: 40,
+                          //           child: Center(
+                          //             child: Text(
+                          //               '28%\nFiber',
+                          //               style: TextStyle(
+                          //                   fontFamily: 'Poppins',
+                          //                   fontSize: 12,
+                          //                   fontWeight: FontWeight.w300),
+                          //             ),
+                          //           )),
+                          //     ),
+                          //     Card(
+                          //       child: Container(
+                          //           width: 62,
+                          //           height: 40,
+                          //           child: Center(
+                          //             child: Text(
+                          //               '0.2%\nFat',
+                          //               style: TextStyle(
+                          //                   fontFamily: 'Poppins',
+                          //                   fontSize: 12,
+                          //                   fontWeight: FontWeight.w300),
+                          //             ),
+                          //           )),
+                          //     ),
+                          //   ],
+                          // ),
+                          // SizedBox(height: 40),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Card(
-                                child: Container(
-                                    width: 62,
-                                    height: 40,
-                                    child: Center(
-                                      child: Text(
-                                        '88%\nWater',
-                                        style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    )),
-                              ),
-                              Card(
-                                child: Container(
-                                    width: 62,
-                                    height: 40,
-                                    child: Center(
-                                      child: Text(
-                                        '0.9%\nProtien',
-                                        style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    )),
-                              ),
-                              Card(
-                                child: Container(
-                                    width: 62,
-                                    height: 40,
-                                    child: Center(
-                                      child: Text(
-                                        '28%\nFiber',
-                                        style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    )),
-                              ),
-                              Card(
-                                child: Container(
-                                    width: 62,
-                                    height: 40,
-                                    child: Center(
-                                      child: Text(
-                                        '0.2%\nFat',
-                                        style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    )),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 40),
-                          Row(
-                            children: [
                               Container(
-                                  width: 150,
-                                  height: 50,
+                                  width: 145,
+                                  height: 40,
                                   decoration: BoxDecoration(
                                       color: Colors.red,
-                                      borderRadius: BorderRadius.circular(50)),
+                                      borderRadius: BorderRadius.circular(20)),
                                   child: Card(
-                                      elevation: 30,
+                                      elevation: 10,
                                       color: Colors.red,
                                       child: ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(50),
+                                              BorderRadius.circular(10),
                                           child: Row(
                                             children: [
                                               IconButton(
-                                                  onPressed: decrementQuantity,
+                                                  onPressed: controller.decrementQuantity,
                                                   icon: Icon(
                                                     Icons
                                                         .remove_circle_outlined,
-                                                    size: 30,
+                                                    size: 20,
                                                     color: const Color.fromARGB(
                                                         255, 94, 221, 98),
                                                   )),
-                                              Text(
-                                                '$quantity Kg',
+                                                  Obx((){
+                                                     return Text(
+                                                '${controller.quantity.value} ${items.unit}',
                                                 style: TextStyle(
                                                     fontFamily: 'Poppins',
                                                     fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                                                    fontWeight: FontWeight.normal,
                                                     color: Colors.white),
-                                              ),
+                                              );
+                                                  }),
+                                              
                                               IconButton(
-                                                  onPressed: incrementQuantity,
+                                                  onPressed: controller.incrementQuantity,
                                                   icon: Icon(
                                                     Icons.add_circle_outlined,
-                                                    size: 30,
+                                                    size: 20,
                                                     color: const Color.fromARGB(
                                                         255, 94, 221, 98),
                                                   ))
                                             ],
                                           )))),
                               SizedBox(
-                                width: 60,
+                                width: 50,
                               ),
-                              ElevatedButton(
+                              Container(
+                                height: 40,
+                                width: 145,
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Card(
+                                      elevation: 10,
+                                      color: Colors.red,
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child:ElevatedButton(
                                   style: ButtonStyle(
                                       backgroundColor:
                                           WidgetStatePropertyAll(Colors.red)),
-                                  onPressed: () {
-                                    Get.toNamed('/Cart');
-                                  },
+                                   onPressed: () async {
+                                        StorageService service = StorageService();
+                                        String? userId = await service.readUserId(); 
+                                                    if (userId != null) {
+                                                    controller.addToCart(userId, items.id, controller.quantity.value);
+                                                    print(controller.quantity.value);
+                                                  } else {
+                                                    // Handle the case where userId is not available
+                                                    print("User ID not found");
+                                                  }
+                                      },
                                   child: Text(
                                     'Add Cart',
                                     style: TextStyle(
@@ -271,7 +282,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         fontWeight: FontWeight.w700,
                                         color: Colors.white),
                                   ))
-                            ],
+                              )
+                              
+                          ))],
                           )
                         ],
                       ),
@@ -286,3 +299,32 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 }
+
+// class ProductDetails extends StatefulWidget {
+  
+//   const ProductDetails({Key? key}) : super(key: key);
+
+//   @override
+//   _ProductDetailsState createState() => _ProductDetailsState();
+// }
+
+// class _ProductDetailsState extends State<ProductDetails> {
+//   late final Item items;
+  
+  // int quantity = 1;
+
+  // void incrementQuantity() {
+  //   setState(() {
+  //     quantity++;
+  //   });
+  // }
+
+  // void decrementQuantity() {
+  //   if (quantity > 1) {
+  //     setState(() {
+  //       quantity--;
+  //     });
+  //   }
+  // }
+
+  

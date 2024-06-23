@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_get_x/controller/auth_controller.dart';
+import 'package:flutter_get_x/presentation/pages/forget_password.dart';
 import 'package:get/get.dart';
 
 class Signin extends StatefulWidget {
@@ -11,6 +13,9 @@ class Signin extends StatefulWidget {
 class _SigninState extends State<Signin> {
   bool visibility = false;
   bool checkValue = false;
+  final AuthController controller = Get.put(AuthController());
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +60,7 @@ class _SigninState extends State<Signin> {
                   color: Colors.green,
                 )),
             child: TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(10),
                 border: OutlineInputBorder(
@@ -84,6 +90,7 @@ class _SigninState extends State<Signin> {
                   color: Colors.green,
                 )),
             child: TextField(
+              controller: _passwordController,
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10),
                   border: OutlineInputBorder(
@@ -109,7 +116,7 @@ class _SigninState extends State<Signin> {
             padding: EdgeInsets.only(left: 200),
             child: GestureDetector(
               onTap: () {
-                Get.toNamed('/Forget_password');
+                Get.to(()=> Forget_password());
               },
               child: Text(
                 'Forget Password',
@@ -132,7 +139,7 @@ class _SigninState extends State<Signin> {
                   width: 260,
                   child: ElevatedButton(
                       onPressed: () {
-                        Get.toNamed('/Main_Page');
+                        controller.login(_emailController.text, _passwordController.text);
                       },
                       style: const ButtonStyle(
                           backgroundColor:
